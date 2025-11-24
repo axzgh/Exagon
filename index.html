@@ -3,17 +3,25 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Hikari AI — Landing + Sesión Herramientas</title>
+<title>Hikari AI — Landing + Sesión Animada</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg:#000;
     --text:#fff;
     --muted:#bfbfbf;
-    --accent:#fff;
-    --panel: rgba(255,255,255,0.04);
     --glass: rgba(255,255,255,0.03);
+    --panel: rgba(255,255,255,0.02);
+    --accent:#f6f6f6;
+    --tone:#ffdd57;
   }
+
+  /* Accessibility: respect reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  }
+
+  /* Reset ligero */
   *{box-sizing:border-box}
   html,body{height:100%}
   body{
@@ -23,9 +31,11 @@
     color:var(--text);
     -webkit-font-smoothing:antialiased;
     -moz-osx-font-smoothing:grayscale;
+    overflow-x:hidden;
+    scroll-behavior:smooth;
   }
 
-  /* Layout original */
+  /* Basic layout */
   .wrap{
     min-height:100vh;
     display:flex;
@@ -33,120 +43,145 @@
     justify-content:flex-start;
     padding:28px 48px;
     gap:28px;
+    opacity:0;
+    animation:fadeInUp .9s cubic-bezier(.2,.9,.3,1) .08s forwards;
   }
-  nav{display:flex; gap:48px; align-items:center; font-weight:600;}
-  nav a{color:var(--text); text-decoration:none; font-size:18px;}
 
+  @keyframes fadeInUp{
+    from{opacity:0; transform:translateY(10px)}
+    to{opacity:1; transform:translateY(0)}
+  }
+
+  nav{display:flex; gap:48px; align-items:center; font-weight:600; transform:translateY(-6px); opacity:0; animation:navAppear .7s .12s forwards;}
+  nav a{color:var(--text); text-decoration:none; font-size:18px; position:relative; padding:6px 2px;}
+  nav a::after{content:""; position:absolute; left:0; bottom:-6px; height:2px; width:0; background:var(--accent); transition:width .28s;}
+  nav a:hover::after{width:100%;}
+  @keyframes navAppear{to{transform:none; opacity:1}}
+
+  /* Hero */
   .hero{
     display:flex;
     gap:40px;
     align-items:center;
     justify-content:space-between;
-    margin-top:20px;
+    margin-top:8px;
   }
   .left{flex:1; max-width:900px;}
-  h1{margin:0; font-weight:800; line-height:0.95; font-size:84px; color:var(--text);}
-  h1 .thin{font-weight:300; display:block}
-  h1 .big{display:block}
+  h1{margin:0; font-weight:800; line-height:0.95; font-size:92px; color:var(--text); letter-spacing:-1px;}
+  h1 .thin{font-weight:300; display:block; opacity:.95; transform:translateX(-6px); animation:staggerIn .6s .05s cubic-bezier(.2,.9,.3,1) forwards;}
+  h1 .big{display:block; transform:translateX(-6px); opacity:0; animation:staggerIn .6s .12s cubic-bezier(.2,.9,.3,1) forwards;}
+  @keyframes staggerIn{to{transform:none; opacity:1}}
 
+  /* Right column with avatar */
   .right{width:420px; display:flex; flex-direction:column; align-items:center; gap:18px; position:relative;}
-  .avatar-wrap{width:420px; border-top:4px solid rgba(255,255,255,0.12); padding-top:10px; display:flex; justify-content:center;}
-  .avatar{width:320px; max-width:100%; display:block; transform:translateY(-10px);}
+  .avatar-wrap{
+    width:420px; border-top:4px solid rgba(255,255,255,0.12); padding-top:10px; display:flex; justify-content:center;
+    transform:translateY(20px); opacity:0; animation:avatarIn .9s .28s cubic-bezier(.2,.9,.3,1) forwards;
+  }
+  @keyframes avatarIn{to{transform:none; opacity:1}}
 
-  .cta-frame{background:transparent; border:2px solid rgba(255,255,255,0.12); padding:12px 18px; display:inline-block; margin-top:6px;}
-  .cta{display:inline-block; background:#f6f6f6; color:#111; padding:10px 20px; border-radius:8px; font-weight:700; text-decoration:none;}
+  .avatar{
+    width:320px; max-width:100%; display:block; transform-origin:center;
+    animation:float 4.8s ease-in-out infinite, popIn .5s .28s both;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+    border-radius:6px;
+  }
+  @keyframes popIn{from{transform:scale(.96); opacity:0} to{transform:scale(1); opacity:1}}
+  @keyframes float{
+    0%{transform:translateY(-4px)}
+    50%{transform:translateY(6px)}
+    100%{transform:translateY(-4px)}
+  }
 
-  .bottom-actions{display:flex; gap:18px; margin-top:56px; align-items:center;}
-  .outline-btn{border:2px solid rgba(255,255,255,0.2); padding:18px 28px; min-width:260px; text-align:center; background:transparent; color:var(--text); font-weight:600; border-radius:4px; display:flex; align-items:center; justify-content:center; gap:12px;}
-  .store-badge{height:36px;}
+  .cta-frame{background:transparent; border:2px solid rgba(255,255,255,0.12); padding:12px 18px; display:inline-block; margin-top:6px; transform:translateY(6px); opacity:0; animation:fadeInUp .6s .36s forwards;}
+  .cta{display:inline-block; background:var(--accent); color:#111; padding:12px 22px; border-radius:10px; font-weight:800; text-decoration:none; box-shadow:0 6px 0 rgba(0,0,0,0.25); transition:transform .18s cubic-bezier(.2,.9,.3,1), box-shadow .18s; will-change:transform,box-shadow;}
+  .cta:hover{transform:translateY(-6px); box-shadow:0 14px 24px rgba(0,0,0,0.4)}
+  .cta:active{transform:translateY(-2px)}
 
-  /* SESIÓN OCULTA (fullscreen) */
+  /* Bottom outline buttons */
+  .bottom-actions{display:flex; gap:18px; margin-top:56px; align-items:center; opacity:0; transform:translateY(10px); animation:fadeInUp .6s .44s forwards;}
+  .outline-btn{border:2px solid rgba(255,255,255,0.16); padding:18px 28px; min-width:260px; text-align:center; background:transparent; color:var(--text); font-weight:600; border-radius:8px; display:flex; align-items:center; justify-content:center; gap:12px; transition:transform .18s, background .18s, box-shadow .18s;}
+  .outline-btn:hover{transform:translateY(-6px); background:rgba(255,255,255,0.02); box-shadow:0 10px 30px rgba(0,0,0,0.6)}
+  .store-badge{height:36px}
+
+  /* SESIÓN OCULTA */
   .session {
-    position:fixed;
-    inset:0;
-    background: linear-gradient(180deg, rgba(0,0,0,0.96), rgba(0,0,0,0.99));
-    color:var(--text);
-    z-index:120;
-    display:none;
-    flex-direction:column;
-    padding:18px 22px;
-    gap:12px;
+    position:fixed; inset:0; background: linear-gradient(180deg, rgba(0,0,0,0.96), rgba(0,0,0,0.99)); color:var(--text);
+    z-index:120; display:none; flex-direction:column; padding:18px 22px; gap:12px;
+    transform:translateY(24px); opacity:0; transition:all .36s cubic-bezier(.2,.9,.3,1);
   }
-  .session.show{display:flex}
-  .session-header{
-    display:flex;
-    align-items:center;
-    gap:16px;
-    justify-content:space-between;
-  }
-  .session-title{font-weight:800; font-size:20px}
+  .session.show{display:flex; transform:none; opacity:1; animation:sessionPop .36s cubic-bezier(.2,.9,.3,1) both;}
+  @keyframes sessionPop{from{transform:scale(.98); opacity:0} to{transform:none; opacity:1}}
+
+  .session-header{display:flex; align-items:center; gap:16px; justify-content:space-between;}
+  .session-title{font-weight:800; font-size:18px; letter-spacing:.2px; display:flex; align-items:center; gap:10px}
+  .meta{color:var(--muted); font-size:13px}
+
   .session-controls{display:flex; gap:8px; align-items:center;}
 
-  /* busqueda y filtros */
+  /* Searchbar animated */
   .searchbar{
-    display:flex; gap:12px; align-items:center;
-    background:var(--glass); padding:10px 12px; border-radius:10px; min-width:320px;
-    border:1px solid rgba(255,255,255,0.04);
+    display:flex; gap:12px; align-items:center; background:var(--glass); padding:10px 12px; border-radius:12px; min-width:320px; border:1px solid rgba(255,255,255,0.04); transition:box-shadow .18s;
   }
-  .searchbar input{
-    background:transparent; border:0; outline:0; color:var(--text); font-size:15px; width:420px;
-  }
-  .pill{background:transparent; border:1px solid rgba(255,255,255,0.06); padding:8px 10px; border-radius:8px; cursor:pointer; font-size:14px;}
+  .searchbar:focus-within{box-shadow:0 8px 30px rgba(0,0,0,0.6)}
+  .searchbar input{background:transparent; border:0; outline:0; color:var(--text); font-size:15px; width:420px; transition:width .28s;}
+  .searchbar input::placeholder{color:rgba(255,255,255,0.34)}
+  .searchbar input:focus{width:620px}
+  .loader{width:16px; height:16px; border-radius:50%; border:2px solid rgba(255,255,255,0.08); border-top-color:var(--accent); animation:spin 1s linear infinite; opacity:0; transform:translateY(-2px);}
+  .loader.show{opacity:1}
+  @keyframes spin{to{transform:rotate(360deg)}}
 
-  /* contador pequeño */
-  .meta{color:var(--muted); font-size:13px; margin-left:12px}
+  .pill{background:transparent; border:1px solid rgba(255,255,255,0.06); padding:8px 10px; border-radius:8px; cursor:pointer; font-size:14px; transition:transform .15s, background .12s, border-color .12s;}
+  .pill:hover{transform:translateY(-4px); border-color:rgba(255,255,255,0.12)}
+  .pill.active{background:linear-gradient(90deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02)); border-color:rgba(255,255,255,0.18); transform:translateY(-2px)}
 
-  /* grid de tarjetas */
+  /* grid */
   .tool-grid{
-    margin-top:10px;
-    display:grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap:12px;
-    align-items:start;
-    overflow:auto;
-    padding:12px;
-    height:calc(100vh - 150px);
-    border-top:1px solid rgba(255,255,255,0.03);
+    margin-top:10px; display:grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap:12px; align-items:start;
+    overflow:auto; padding:12px; height:calc(100vh - 150px); border-top:1px solid rgba(255,255,255,0.03);
   }
   .card{
     background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-    border:1px solid rgba(255,255,255,0.05);
-    padding:12px;
-    border-radius:10px;
-    display:flex;
-    flex-direction:column;
-    gap:8px;
+    border:1px solid rgba(255,255,255,0.05); padding:12px; border-radius:12px; display:flex; flex-direction:column; gap:8px;
+    transform:translateY(18px) scale(.99); opacity:0; animation:cardIn .42s ease forwards;
+    transition:transform .22s cubic-bezier(.2,.9,.3,1), box-shadow .22s;
   }
-  .card .icon{
-    width:48px; height:48px; border-radius:10px; display:inline-flex; align-items:center; justify-content:center; font-weight:700;
-    color:#111; background:#fff; box-shadow: 0 2px 0 rgba(0,0,0,0.2);
-  }
-  .card h3{margin:0; font-size:16px;}
+  .card:hover{transform:translateY(-6px) scale(1.01); box-shadow:0 28px 60px rgba(0,0,0,0.6)}
+  @keyframes cardIn{to{transform:none; opacity:1}}
+
+  .icon{width:48px; height:48px; border-radius:10px; display:inline-flex; align-items:center; justify-content:center; font-weight:700; color:#111; background:#fff; box-shadow: 0 2px 0 rgba(0,0,0,0.2); font-size:14px;}
+  .card h3{margin:0; font-size:15px; letter-spacing:-.2px}
   .card p{margin:0; font-size:13px; color:var(--muted); min-height:38px;}
   .tags{display:flex; gap:6px; flex-wrap:wrap;}
-  .tag{font-size:11px; padding:4px 6px; border-radius:6px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.02); color:var(--muted);}
+  .tag{font-size:11px; padding:4px 6px; border-radius:8px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.02); color:var(--muted); transform:scale(.96); opacity:0; animation:tagPop .28s .12s both;}
+  @keyframes tagPop{to{transform:none; opacity:1}}
 
-  .card .actions{display:flex; gap:8px; margin-top:6px; justify-content:space-between;}
-  .btn{background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.06); padding:8px 10px; border-radius:8px; cursor:pointer; font-weight:600; color:var(--text);}
-  .btn.primary{background:#f6f6f6; color:#111; border:none;}
+  .actions{display:flex; gap:8px; margin-top:6px; justify-content:space-between;}
+  .btn{background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.04); padding:8px 10px; border-radius:8px; cursor:pointer; font-weight:700; color:var(--text); transition:transform .12s;}
+  .btn:hover{transform:translateY(-3px)}
+  .btn.primary{background:var(--accent); color:#111; border:none; box-shadow:0 6px 0 rgba(0,0,0,0.2)}
 
   /* modal */
   .modal-back{position:fixed; inset:0; display:none; align-items:center; justify-content:center; z-index:200;}
-  .modal-back.show{display:flex; background:rgba(0,0,0,0.6)}
-  .modal{width:760px; max-width:92%; background:var(--bg); border:1px solid rgba(255,255,255,0.06); padding:18px; border-radius:12px; color:var(--text)}
-  .modal h2{margin:0 0 8px 0}
-  .modal p{color:var(--muted)}
-  .close-x{cursor:pointer; padding:8px}
+  .modal-back.show{display:flex; background:rgba(0,0,0,0.6); animation:backFade .24s}
+  @keyframes backFade{from{opacity:0} to{opacity:1}}
+  .modal{width:760px; max-width:92%; background:var(--bg); border:1px solid rgba(255,255,255,0.06); padding:18px; border-radius:12px; color:var(--text); transform:scale(.96); opacity:0; animation:modalIn .28s forwards;}
+  @keyframes modalIn{to{transform:none; opacity:1}}
+  .close-x{cursor:pointer; padding:8px; transition:transform .12s}
+  .close-x:hover{transform:rotate(12deg) scale(1.03)}
 
-  /* loader tiny */
-  .loader{width:16px; height:16px; border-radius:50%; border:2px solid rgba(255,255,255,0.08); border-top-color:var(--text); animation:spin 1s linear infinite}
-  @keyframes spin{to{transform:rotate(360deg)}}
+  /* tiny helper */
+  .tiny{font-size:12px; color:var(--muted)}
 
-  /* Responsive */
+  /* responsive */
+  @media (max-width:1100px){ h1{font-size:64px} .right{width:360px} .avatar{width:260px} .searchbar input:focus{width:260px} }
   @media (max-width:720px){
-    h1{font-size:48px}
+    h1{font-size:44px}
+    .hero{flex-direction:column; align-items:flex-start}
+    .avatar-wrap{width:100%; display:flex; justify-content:flex-end}
+    .avatar{width:220px}
     .searchbar input{width:160px}
-    .tool-grid{height:calc(100vh - 190px)}
+    .tool-grid{height:calc(100vh - 220px)}
   }
 </style>
 </head>
@@ -159,7 +194,7 @@
 
     <main class="hero" role="main" aria-labelledby="hero-title">
       <div class="left">
-        <span class="eyebrow"></span>
+        <span class="eyebrow tiny"> </span>
         <h1 id="hero-title">
           <span class="thin">¿Listo/a para</span>
           <span class="big">explorar con</span>
@@ -174,7 +209,7 @@
         </div>
 
         <div style="width:100%; display:flex; justify-content:center;">
-          <div class="cta-frame">
+          <div class="cta-frame" role="button" aria-label="Entrar">
             <a class="cta" id="enter-btn" href="#explorar">¡Entra YA!</a>
           </div>
         </div>
@@ -198,28 +233,29 @@
   </div>
 
   <!-- SESIÓN OCULTA -->
-  <div class="session" id="session">
+  <div class="session" id="session" aria-hidden="true">
     <div class="session-header">
       <div style="display:flex; align-items:center; gap:12px;">
-        <div class="session-title">Sesión — Herramientas (modo: reguero productivo)</div>
+        <div class="session-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="opacity:.9"><path d="M12 2v20" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg>
+          Sesión — Herramientas (modo: reguero)
+        </div>
         <div class="meta" id="meta-count">Generando herramientas…</div>
       </div>
 
       <div class="session-controls">
         <div class="searchbar" title="Buscar">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M21 21l-4.35-4.35" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg>
-          <input id="search" placeholder="Buscar herramienta, tag o función..." />
-          <div id="loader" style="display:none" title="Cargando">
-            <div class="loader"></div>
-          </div>
+          <input id="search" placeholder="Buscar herramienta, tag o función..." aria-label="Buscar" />
+          <div id="loader" class="loader" title="Cargando"></div>
         </div>
 
-        <div class="pill" id="sortBtn">Ordenar: Relevancia</div>
-        <div class="pill" id="closeSession" title="Cerrar sesión">Cerrar ✕</div>
+        <div class="pill" id="sortBtn" role="button" aria-pressed="false">Ordenar: Relevancia</div>
+        <div class="pill" id="closeSession" role="button" title="Cerrar sesión">Cerrar ✕</div>
       </div>
     </div>
 
-    <!-- filtros simples -->
+    <!-- filtros -->
     <div style="display:flex; gap:8px; align-items:center;">
       <div class="pill filter" data-filter="Analizador">Analizador</div>
       <div class="pill filter" data-filter="Generador">Generador</div>
@@ -236,11 +272,11 @@
   </div>
 
   <!-- modal -->
-  <div class="modal-back" id="modalBack">
+  <div class="modal-back" id="modalBack" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
       <div style="display:flex; justify-content:space-between; align-items:center;">
         <h2 id="modalTitle">Herramienta</h2>
-        <div class="close-x" id="modalClose">Cerrar ✕</div>
+        <div class="close-x" id="modalClose" role="button" title="Cerrar">Cerrar ✕</div>
       </div>
       <p id="modalDesc">Descripción...</p>
       <div style="display:flex; gap:8px; margin-top:12px; justify-content:flex-end;">
@@ -252,10 +288,10 @@
 
 <script>
 /* ---------------------------
-   Comportamiento de la sesión
+   Comportamiento (con animaciones)
    --------------------------- */
 
-/* Variables de control */
+/* Elementos */
 const sessionEl = document.getElementById('session');
 const enterBtn = document.getElementById('enter-btn');
 const closeSession = document.getElementById('closeSession');
@@ -273,27 +309,21 @@ const modalDemo = document.getElementById('modalDemo');
 const modalClose = document.getElementById('modalClose');
 
 let totalGenerated = 0;
-let generatedItems = []; // array con meta de todas las herramientas "indexadas"
-let visibleItems = []; // items filtrados actualmente
+let generatedItems = [];
+let visibleItems = [];
 let isGenerating = false;
-let batchSize = 60; // cuántas genera por lote (ajustable)
-let maxSimulated = 200000; // simula hasta X herramientas si quieres; no lo generes todo en DOM
-let generatorId = 0;
+let batchSize = 60;
+let maxSimulated = 200000;
+let domRendered = 0;
+const renderBatchSize = 40;
 
-/* Utility: genera nombres y tags aleatorios para simular herramientas */
+/* Helper randomness */
 const TAGS = ['Analizador','Generador','Transformador','Integrador','Utilidad','Data','NLP','Vision','Audio','Automatización','Script','QA','Ops'];
-
 function randInt(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
-
 function makeTool(id){
-  // crea metadata ligera; no añadimos al DOM aún
-  const base = [
-    'AutoPrompt','BatchForge','InsightMiner','CodeWeaver','QuickParse','VisionSlice','AudioGlue','FlowMatic',
-    'SpecSynth','PromptTuner','ChainBinder','Formator','DataPolish','RegexGolem','LayoutWizard'
-  ];
+  const base = ['AutoPrompt','BatchForge','InsightMiner','CodeWeaver','QuickParse','VisionSlice','AudioGlue','FlowMatic','SpecSynth','PromptTuner','ChainBinder','Formator','DataPolish','RegexGolem','LayoutWizard'];
   const verb = base[id % base.length];
   const name = `${verb} · ${String(id).padStart(5,'0')}`;
-  // selección aleatoria de 1-3 tags
   const tags = [];
   const tcount = randInt(1,3);
   const used = {};
@@ -306,67 +336,59 @@ function makeTool(id){
   return { id, name, tags, desc, iconText: name.split(' ')[0].slice(0,2).toUpperCase() };
 }
 
-/* Generador perezoso: genera metadata en lotes sin bloquear IU */
+/* Generación perezosa (micro-lotes) */
 function generateBatch(count, cb){
   if(isGenerating) return;
   isGenerating = true;
   const start = totalGenerated + 1;
   const end = Math.min(totalGenerated + count, maxSimulated);
   let i = start;
-  function loopChunk(){
-    const chunk = 200; // micro-lotes
-    const fragment = [];
-    for(let k=0;k<chunk && i<=end; k++, i++){
-      const item = makeTool(i);
-      generatedItems.push(item);
+  function chunk(){
+    const chunkSize = 200;
+    for(let k=0;k<chunkSize && i<=end; k++, i++){
+      generatedItems.push(makeTool(i));
     }
     totalGenerated = generatedItems.length;
     metaCount.textContent = `Generadas: ${totalGenerated.toLocaleString()}`;
     if(i <= end){
-      // deja respirar al hilo de la UI
-      requestAnimationFrame(loopChunk);
+      requestAnimationFrame(chunk);
     } else {
       isGenerating = false;
       if(cb) cb();
     }
   }
-  requestAnimationFrame(loopChunk);
+  requestAnimationFrame(chunk);
 }
 
-/* Render en grid: solo renderiza un SUBCONJUNTO filtrado o por scroll.
-   Estrategia simple: cuando haya X items visibles, añadimos más al DOM en lotes.
-*/
-let domRendered = 0;
-const renderBatchSize = 40;
-
+/* Render visible y paginado en DOM */
 function applyFiltersAndRender(){
   const q = (searchInput.value || '').trim().toLowerCase();
   const activeFilters = Array.from(document.querySelectorAll('.filter.active')).map(el=>el.dataset.filter);
-  // filtrado sobre metadata (no recorremos DOM)
   visibleItems = generatedItems.filter(item=>{
     if(q){
       const hay = item.name.toLowerCase().includes(q) || item.desc.toLowerCase().includes(q) || item.tags.join(' ').toLowerCase().includes(q);
       if(!hay) return false;
     }
     if(activeFilters.length){
-      // al menos uno de sus tags debe coincidir
       if(!item.tags.some(t => activeFilters.includes(t))) return false;
     }
     return true;
   });
   visibleCount.textContent = `${visibleItems.length.toLocaleString()} visibles`;
-  // reset DOM render
   domRendered = 0;
   toolGrid.innerHTML = '';
   renderMore();
 }
 
+/* Añade más tarjetas al DOM con efecto stagger */
 function renderMore(){
   if(domRendered >= visibleItems.length) return;
   const slice = visibleItems.slice(domRendered, domRendered + renderBatchSize);
   const frag = document.createDocumentFragment();
-  slice.forEach(item=>{
+  slice.forEach((item, idx)=>{
     const card = makeCard(item);
+    // delay para efecto cascada
+    card.style.animationDelay = `${(domRendered + idx) * 12}ms`;
     frag.appendChild(card);
   });
   toolGrid.appendChild(frag);
@@ -374,7 +396,7 @@ function renderMore(){
   visibleCount.textContent = `${visibleItems.length.toLocaleString()} visibles · mostrando ${domRendered.toLocaleString()}`;
 }
 
-/* Crear un elemento tarjeta (DOM) */
+/* Crear tarjeta DOM */
 function makeCard(item){
   const el = document.createElement('div');
   el.className = 'card';
@@ -396,44 +418,40 @@ function makeCard(item){
       <div style="color:var(--muted); font-size:12px;">ID ${item.id}</div>
     </div>
   `;
-  // eventos
   el.querySelector('.openBtn').addEventListener('click', ()=> openModal(item));
   el.querySelector('.demoBtn').addEventListener('click', ()=> quickDemo(item));
   return el;
 }
 
-/* Eventos modal y demo */
+/* Modal */
 function openModal(item){
   modalTitle.textContent = item.name;
-  modalDesc.textContent = item.desc + ' — Esto es una demo local; la herramienta se puede integrar con APIs o dejarse como snippet autónomo.';
+  modalDesc.textContent = item.desc + ' — Esta es una demo local; integrar APIs requiere backend.';
   modalBack.classList.add('show');
+  modalBack.setAttribute('aria-hidden','false');
   modalOpen.onclick = ()=> {
     modalBack.classList.remove('show');
-    alert(`Abriendo herramienta: ${item.name}\n(En esta demo, abrir = mostrar info. Integración real requiere backend).`);
+    modalBack.setAttribute('aria-hidden','true');
+    alert(`Abriendo herramienta: ${item.name}\n(En esta demo, abrir = mostrar info)`);
   };
-  modalDemo.onclick = ()=> {
-    quickDemo(item);
-  };
+  modalDemo.onclick = ()=> { quickDemo(item); };
 }
 
 function quickDemo(item){
-  alert(`Demo rápida de ${item.name}\nTags: ${item.tags.join(', ')}\nDescripción: ${item.desc}`);
+  // demo minimal: new window con info (simula abrir)
+  const w = window.open('', '_blank', 'noopener,noreferrer,width=720,height=560');
+  if(!w){ alert(`Demo de ${item.name}\nTags: ${item.tags.join(', ')}\n\n(Allowed popup blocked?)`); return; }
+  w.document.write(`<body style="font-family:Inter,Arial;background:#000;color:#fff;padding:18px;"><h2>${escapeHtml(item.name)}</h2><p style="color:#ccc;">${escapeHtml(item.desc)}</p><pre style="color:#aaf;background:#001;padding:12px;border-radius:8px;">Simulación rápida de herramienta: ${escapeHtml(item.name)}</pre></body>`);
 }
 
-/* cerrar modal */
-modalClose.addEventListener('click', ()=> modalBack.classList.remove('show'));
-modalBack.addEventListener('click', (e)=> { if(e.target === modalBack) modalBack.classList.remove('show'); });
-
-/* Generador visual: color para iconos */
+/* Color helper */
 function colorFromId(id){
   const hue = (id * 47) % 360;
-  return `hsl(${hue} 60% 70%)`;
+  return `hsl(${hue} 65% 75%)`;
 }
-
-/* Escape básico para seguridad */
 function escapeHtml(s){ return String(s).replace(/[&<>"']/g, (m)=> ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
 
-/* Scroll infinito: cuando el usuario llegue a 80% dentro del grid, renderizar más */
+/* Scroll infinito */
 toolGrid.addEventListener('scroll', ()=>{
   const el = toolGrid;
   if(el.scrollTop + el.clientHeight > el.scrollHeight - 800){
@@ -441,19 +459,17 @@ toolGrid.addEventListener('scroll', ()=>{
   }
 });
 
-/* pulsar ENTRA: oculta hero y lanza sesión generadora */
+/* Entra: abre sesión con animación y empieza a generar */
 enterBtn.addEventListener('click', function(e){
   e.preventDefault();
-  // animación mínima: desaparecer hero y mostrar session
   document.getElementById('main-wrap').style.display = 'none';
   sessionEl.classList.add('show');
-  // Si no hay items generados, empezar a generar y luego filtrar/render
+  sessionEl.setAttribute('aria-hidden','false');
   if(generatedItems.length === 0){
-    loader.style.display = 'inline-block';
+    loader.classList.add('show');
     generateBatch(500, ()=>{
-      loader.style.display = 'none';
+      loader.classList.remove('show');
       applyFiltersAndRender();
-      // empezar generación continua en background (simula "millones" hasta maxSimulated)
       scheduleBackgroundGeneration();
     });
   } else {
@@ -461,82 +477,85 @@ enterBtn.addEventListener('click', function(e){
   }
 });
 
-/* cerrar sesión vuelve a la página principal */
+/* cerrar sesión */
 closeSession.addEventListener('click', ()=>{
   sessionEl.classList.remove('show');
+  sessionEl.setAttribute('aria-hidden','true');
   document.getElementById('main-wrap').style.display = 'block';
+  window.scrollTo({top:0, behavior:'smooth'});
 });
 
-/* filtros: toggle */
+/* filtros toggle */
 document.querySelectorAll('.filter').forEach(el=>{
   el.addEventListener('click', ()=>{
     el.classList.toggle('active');
-    el.style.borderColor = el.classList.contains('active') ? 'rgba(255,255,255,0.18)' : 'rgba(255,255,255,0.06)';
+    el.setAttribute('aria-pressed', el.classList.contains('active'));
     applyFiltersAndRender();
   });
 });
 
-/* búsqueda con debounce */
+/* búsqueda con debounce y animación loader */
 let debounceTimer = null;
 searchInput.addEventListener('input', ()=>{
   if(debounceTimer) clearTimeout(debounceTimer);
-  loader.style.display = 'inline-block';
+  loader.classList.add('show');
   debounceTimer = setTimeout(()=>{
     applyFiltersAndRender();
-    loader.style.display = 'none';
+    loader.classList.remove('show');
   }, 220);
 });
 
-/* ordenar: solo demostrativo (alterna) */
+/* ordenar (simulación) */
 sortBtn.addEventListener('click', ()=>{
   if(sortBtn.textContent.includes('Relevancia')){
     sortBtn.textContent = 'Ordenar: ID asc';
     generatedItems.sort((a,b)=>a.id-b.id);
   } else {
     sortBtn.textContent = 'Ordenar: Relevancia';
-    // random shuffle para "relevancia"
     generatedItems.sort(()=>Math.random()-0.5);
   }
   applyFiltersAndRender();
 });
 
-/* Background generation en lotes, para simular "millones" sin colapsar */
+/* background generation por lotes */
+let generatorId = 0;
 function scheduleBackgroundGeneration(){
   generatorId++;
   const thisId = generatorId;
   function step(){
-    if(thisId !== generatorId) return; // cancelado
+    if(thisId !== generatorId) return;
     if(totalGenerated >= maxSimulated) return;
-    // genera otro lote moderado
     generateBatch(batchSize, ()=>{
-      // si ya hay filtros activos, actualizamos la vista
       applyFiltersAndRender();
-      // esperar un poco antes del siguiente lote
-      setTimeout(step, 1500 + Math.random()*1200);
+      setTimeout(step, 1200 + Math.random()*1000);
     });
   }
   setTimeout(step, 700);
 }
 
-/* inicialmente: pre-genera un número pequeño para respuesta rápida */
+/* inicial: pre-genera unos pocos para respuesta rápido */
 generateBatch(120, ()=>{ metaCount.textContent = `Generadas: ${totalGenerated.toLocaleString()}`; applyFiltersAndRender(); });
 
-/* helper fakeLink */
+/* modal close handlers */
+modalClose.addEventListener('click', ()=> { modalBack.classList.remove('show'); modalBack.setAttribute('aria-hidden','true'); });
+modalBack.addEventListener('click', (e)=> { if(e.target === modalBack) { modalBack.classList.remove('show'); modalBack.setAttribute('aria-hidden','true'); } });
+
+/* ESC handling */
+document.addEventListener('keydown', (e)=>{
+  if(e.key === 'Escape'){
+    if(modalBack.classList.contains('show')) { modalBack.classList.remove('show'); modalBack.setAttribute('aria-hidden','true'); }
+    else if(sessionEl.classList.contains('show')) { sessionEl.classList.remove('show'); sessionEl.setAttribute('aria-hidden','true'); document.getElementById('main-wrap').style.display = 'block'; }
+  }
+});
+
+/* fake links */
 function fakeLink(which){
   if(which === 'appstore') alert('Pronto en App Store — todavía no disponible.');
   else alert('Pronto en Google Play — todavía no disponible.');
 }
 
-/* Accessibility: tecla ESC cierra modal o sesión */
-document.addEventListener('keydown', (e)=>{
-  if(e.key === 'Escape'){
-    if(modalBack.classList.contains('show')) modalBack.classList.remove('show');
-    else if(sessionEl.classList.contains('show')) {
-      sessionEl.classList.remove('show');
-      document.getElementById('main-wrap').style.display = 'block';
-    }
-  }
-});
+/* Accessibility: Enter on CTA */
+document.getElementById('enter-btn').addEventListener('keydown', (e)=>{ if(e.key === 'Enter'){ e.preventDefault(); e.target.click(); } });
 </script>
 </body>
 </html>

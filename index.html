@@ -3,183 +3,155 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Hikari AI — Landing</title>
-<!-- Fuente limpia similar al diseño -->
+<title>Hikari AI — Landing + Sesión Herramientas</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg:#000;
-    --text:#ffffff;
+    --text:#fff;
     --muted:#bfbfbf;
-    --accent:#ffffff;
-    --outline-rgba: rgba(255,255,255,0.12);
+    --accent:#fff;
+    --panel: rgba(255,255,255,0.04);
+    --glass: rgba(255,255,255,0.03);
   }
-  /* Reset ligero */
   *{box-sizing:border-box}
   html,body{height:100%}
   body{
     margin:0;
-    font-family:"Inter",system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial;
+    font-family:"Inter",system-ui,Roboto,Arial;
     background:var(--bg);
     color:var(--text);
     -webkit-font-smoothing:antialiased;
     -moz-osx-font-smoothing:grayscale;
-    overflow-x:hidden;
   }
 
-  /* Contenedor general centrado verticalmente */
+  /* Layout original */
   .wrap{
     min-height:100vh;
     display:flex;
     flex-direction:column;
-    justify-content:space-between;
-    padding:40px 60px;
+    justify-content:flex-start;
+    padding:28px 48px;
+    gap:28px;
   }
+  nav{display:flex; gap:48px; align-items:center; font-weight:600;}
+  nav a{color:var(--text); text-decoration:none; font-size:18px;}
 
-  /* Navegación superior */
-  nav{
-    display:flex;
-    gap:48px;
-    align-items:center;
-    font-weight:600;
-  }
-  nav a{
-    color:var(--text);
-    text-decoration:none;
-    font-size:18px;
-    opacity:0.95;
-  }
-
-  /* Hero */
   .hero{
     display:flex;
     gap:40px;
     align-items:center;
     justify-content:space-between;
-    margin-top:50px;
+    margin-top:20px;
   }
-
-  .left{
-    flex:1;
-    max-width:900px;
-  }
-  .eyebrow{
-    display:block;
-    height:24px;
-  }
-  h1{
-    margin:0;
-    font-weight:800;
-    letter-spacing:-1px;
-    line-height:0.95;
-    font-size:96px; /* grande en escritorio */
-    color:var(--text);
-  }
-  /* Ajustes para que las líneas queden como en la imagen */
+  .left{flex:1; max-width:900px;}
+  h1{margin:0; font-weight:800; line-height:0.95; font-size:84px; color:var(--text);}
   h1 .thin{font-weight:300; display:block}
   h1 .big{display:block}
 
-  /* Right column con la imagen */
-  .right{
-    width:420px;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:18px;
-    position:relative;
-  }
-  .avatar-wrap{
-    width:420px;
-    border-top:4px solid rgba(255,255,255,0.12);
-    padding-top:10px;
-    display:flex;
-    justify-content:center;
-  }
-  .avatar{
-    width:320px;
-    max-width:100%;
-    display:block;
-    transform:translateY(-10px);
-  }
+  .right{width:420px; display:flex; flex-direction:column; align-items:center; gap:18px; position:relative;}
+  .avatar-wrap{width:420px; border-top:4px solid rgba(255,255,255,0.12); padding-top:10px; display:flex; justify-content:center;}
+  .avatar{width:320px; max-width:100%; display:block; transform:translateY(-10px);}
 
-  /* Botón principal dentro del marco negro con borde */
-  .cta-frame{
-    background:transparent;
-    border:2px solid rgba(255,255,255,0.12);
-    padding:12px 18px;
-    display:inline-block;
-    margin-top:6px;
-  }
-  .cta{
-    display:inline-block;
-    background:#f6f6f6;
-    color:#111;
-    padding:10px 20px;
-    border-radius:8px;
-    font-weight:700;
-    text-decoration:none;
-    box-shadow: 0 2px 0 rgba(0,0,0,0.25);
-  }
+  .cta-frame{background:transparent; border:2px solid rgba(255,255,255,0.12); padding:12px 18px; display:inline-block; margin-top:6px;}
+  .cta{display:inline-block; background:#f6f6f6; color:#111; padding:10px 20px; border-radius:8px; font-weight:700; text-decoration:none;}
 
-  /* Footer-like buttons en fila */
-  .bottom-actions{
-    display:flex;
-    gap:18px;
-    margin-top:56px;
-    align-items:center;
-  }
-  .outline-btn{
-    border:2px solid rgba(255,255,255,0.2);
-    padding:18px 28px;
-    min-width:260px;
-    text-align:center;
-    background:transparent;
+  .bottom-actions{display:flex; gap:18px; margin-top:56px; align-items:center;}
+  .outline-btn{border:2px solid rgba(255,255,255,0.2); padding:18px 28px; min-width:260px; text-align:center; background:transparent; color:var(--text); font-weight:600; border-radius:4px; display:flex; align-items:center; justify-content:center; gap:12px;}
+  .store-badge{height:36px;}
+
+  /* SESIÓN OCULTA (fullscreen) */
+  .session {
+    position:fixed;
+    inset:0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.96), rgba(0,0,0,0.99));
     color:var(--text);
-    font-weight:600;
-    border-radius:4px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    z-index:120;
+    display:none;
+    flex-direction:column;
+    padding:18px 22px;
     gap:12px;
   }
-  .arrow{
-    width:36px;
-    height:36px;
-    display:inline-flex;
+  .session.show{display:flex}
+  .session-header{
+    display:flex;
     align-items:center;
-    justify-content:center;
-    border-left:1px solid rgba(255,255,255,0.06);
+    gap:16px;
+    justify-content:space-between;
   }
-  .store-badge{
-    height:36px;
+  .session-title{font-weight:800; font-size:20px}
+  .session-controls{display:flex; gap:8px; align-items:center;}
+
+  /* busqueda y filtros */
+  .searchbar{
+    display:flex; gap:12px; align-items:center;
+    background:var(--glass); padding:10px 12px; border-radius:10px; min-width:320px;
+    border:1px solid rgba(255,255,255,0.04);
   }
+  .searchbar input{
+    background:transparent; border:0; outline:0; color:var(--text); font-size:15px; width:420px;
+  }
+  .pill{background:transparent; border:1px solid rgba(255,255,255,0.06); padding:8px 10px; border-radius:8px; cursor:pointer; font-size:14px;}
+
+  /* contador pequeño */
+  .meta{color:var(--muted); font-size:13px; margin-left:12px}
+
+  /* grid de tarjetas */
+  .tool-grid{
+    margin-top:10px;
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap:12px;
+    align-items:start;
+    overflow:auto;
+    padding:12px;
+    height:calc(100vh - 150px);
+    border-top:1px solid rgba(255,255,255,0.03);
+  }
+  .card{
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border:1px solid rgba(255,255,255,0.05);
+    padding:12px;
+    border-radius:10px;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+  .card .icon{
+    width:48px; height:48px; border-radius:10px; display:inline-flex; align-items:center; justify-content:center; font-weight:700;
+    color:#111; background:#fff; box-shadow: 0 2px 0 rgba(0,0,0,0.2);
+  }
+  .card h3{margin:0; font-size:16px;}
+  .card p{margin:0; font-size:13px; color:var(--muted); min-height:38px;}
+  .tags{display:flex; gap:6px; flex-wrap:wrap;}
+  .tag{font-size:11px; padding:4px 6px; border-radius:6px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.02); color:var(--muted);}
+
+  .card .actions{display:flex; gap:8px; margin-top:6px; justify-content:space-between;}
+  .btn{background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.06); padding:8px 10px; border-radius:8px; cursor:pointer; font-weight:600; color:var(--text);}
+  .btn.primary{background:#f6f6f6; color:#111; border:none;}
+
+  /* modal */
+  .modal-back{position:fixed; inset:0; display:none; align-items:center; justify-content:center; z-index:200;}
+  .modal-back.show{display:flex; background:rgba(0,0,0,0.6)}
+  .modal{width:760px; max-width:92%; background:var(--bg); border:1px solid rgba(255,255,255,0.06); padding:18px; border-radius:12px; color:var(--text)}
+  .modal h2{margin:0 0 8px 0}
+  .modal p{color:var(--muted)}
+  .close-x{cursor:pointer; padding:8px}
+
+  /* loader tiny */
+  .loader{width:16px; height:16px; border-radius:50%; border:2px solid rgba(255,255,255,0.08); border-top-color:var(--text); animation:spin 1s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
 
   /* Responsive */
-  @media (max-width:1100px){
-    h1{font-size:72px}
-    .right{width:360px}
-  }
-  @media (max-width:900px){
-    .hero{flex-direction:column; align-items:flex-start; gap:28px}
-    .right{width:100%}
+  @media (max-width:720px){
     h1{font-size:48px}
-    .avatar-wrap{width:100%; display:flex; justify-content:flex-end}
-    .avatar{width:240px}
-    .bottom-actions{flex-direction:column; align-items:stretch}
-    .outline-btn{min-width:unset}
+    .searchbar input{width:160px}
+    .tool-grid{height:calc(100vh - 190px)}
   }
-  @media (max-width:420px){
-    h1{font-size:36px; line-height:1}
-    body{padding:18px}
-  }
-
-  /* Pequeñas interacciones */
-  .cta:hover{transform:translateY(-2px)}
-  .outline-btn:hover{background:rgba(255,255,255,0.03); cursor:pointer}
 </style>
 </head>
 <body>
-  <div class="wrap">
+  <div class="wrap" id="main-wrap">
     <nav>
       <a href="#">Nosotros</a>
       <a href="#">Como<br>empezar</a>
@@ -197,7 +169,7 @@
 
       <aside class="right" aria-label="Imagen y llamada a la acción">
         <div class="avatar-wrap" aria-hidden="true">
-          <!-- Imagen principal: pon aquí el archivo hikari.png -->
+          <!-- Imagen principal: pon hikari.png en la carpeta -->
           <img src="hikari.png" alt="Ilustración de personaje Hikari" class="avatar" />
         </div>
 
@@ -225,32 +197,346 @@
     </section>
   </div>
 
-<script>
-  // Comportamientos mínimos: alerta sutil y foco para que parezca "real"
-  document.getElementById('enter-btn').addEventListener('click', function(e){
-    e.preventDefault();
-    // efecto visual y luego scroll a sección inferior simulada
-    this.classList.add('clicked');
-    window.scrollTo({top: document.body.scrollHeight, behavior:'smooth'});
-    setTimeout(()=> alert('Bienvenido a Hikari AI — (demo local) 😼'), 700);
-  });
+  <!-- SESIÓN OCULTA -->
+  <div class="session" id="session">
+    <div class="session-header">
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="session-title">Sesión — Herramientas (modo: reguero productivo)</div>
+        <div class="meta" id="meta-count">Generando herramientas…</div>
+      </div>
 
-  function fakeLink(which){
-    // Simula que las tiendas aún no están listas (como en la imagen: "Pronto")
-    if(which === 'appstore'){
-      alert('Pronto en App Store — todavía no disponible.');
+      <div class="session-controls">
+        <div class="searchbar" title="Buscar">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M21 21l-4.35-4.35" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg>
+          <input id="search" placeholder="Buscar herramienta, tag o función..." />
+          <div id="loader" style="display:none" title="Cargando">
+            <div class="loader"></div>
+          </div>
+        </div>
+
+        <div class="pill" id="sortBtn">Ordenar: Relevancia</div>
+        <div class="pill" id="closeSession" title="Cerrar sesión">Cerrar ✕</div>
+      </div>
+    </div>
+
+    <!-- filtros simples -->
+    <div style="display:flex; gap:8px; align-items:center;">
+      <div class="pill filter" data-filter="Analizador">Analizador</div>
+      <div class="pill filter" data-filter="Generador">Generador</div>
+      <div class="pill filter" data-filter="Transformador">Transformador</div>
+      <div class="pill filter" data-filter="Integrador">Integrador</div>
+      <div class="pill filter" data-filter="Utilidad">Utilidad</div>
+      <div style="flex:1"></div>
+      <div class="meta" id="visible-count">0 visibles</div>
+    </div>
+
+    <div class="tool-grid" id="toolGrid" tabindex="0" aria-live="polite">
+      <!-- tarjetas generadas dinámicamente -->
+    </div>
+  </div>
+
+  <!-- modal -->
+  <div class="modal-back" id="modalBack">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h2 id="modalTitle">Herramienta</h2>
+        <div class="close-x" id="modalClose">Cerrar ✕</div>
+      </div>
+      <p id="modalDesc">Descripción...</p>
+      <div style="display:flex; gap:8px; margin-top:12px; justify-content:flex-end;">
+        <button class="btn" id="modalDemo">Demo</button>
+        <button class="btn primary" id="modalOpen">Abrir herramienta</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+/* ---------------------------
+   Comportamiento de la sesión
+   --------------------------- */
+
+/* Variables de control */
+const sessionEl = document.getElementById('session');
+const enterBtn = document.getElementById('enter-btn');
+const closeSession = document.getElementById('closeSession');
+const toolGrid = document.getElementById('toolGrid');
+const metaCount = document.getElementById('meta-count');
+const visibleCount = document.getElementById('visible-count');
+const loader = document.getElementById('loader');
+const searchInput = document.getElementById('search');
+const sortBtn = document.getElementById('sortBtn');
+const modalBack = document.getElementById('modalBack');
+const modalTitle = document.getElementById('modalTitle');
+const modalDesc = document.getElementById('modalDesc');
+const modalOpen = document.getElementById('modalOpen');
+const modalDemo = document.getElementById('modalDemo');
+const modalClose = document.getElementById('modalClose');
+
+let totalGenerated = 0;
+let generatedItems = []; // array con meta de todas las herramientas "indexadas"
+let visibleItems = []; // items filtrados actualmente
+let isGenerating = false;
+let batchSize = 60; // cuántas genera por lote (ajustable)
+let maxSimulated = 200000; // simula hasta X herramientas si quieres; no lo generes todo en DOM
+let generatorId = 0;
+
+/* Utility: genera nombres y tags aleatorios para simular herramientas */
+const TAGS = ['Analizador','Generador','Transformador','Integrador','Utilidad','Data','NLP','Vision','Audio','Automatización','Script','QA','Ops'];
+
+function randInt(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+
+function makeTool(id){
+  // crea metadata ligera; no añadimos al DOM aún
+  const base = [
+    'AutoPrompt','BatchForge','InsightMiner','CodeWeaver','QuickParse','VisionSlice','AudioGlue','FlowMatic',
+    'SpecSynth','PromptTuner','ChainBinder','Formator','DataPolish','RegexGolem','LayoutWizard'
+  ];
+  const verb = base[id % base.length];
+  const name = `${verb} · ${String(id).padStart(5,'0')}`;
+  // selección aleatoria de 1-3 tags
+  const tags = [];
+  const tcount = randInt(1,3);
+  const used = {};
+  for(let i=0;i<tcount;i++){
+    let t = TAGS[randInt(0,TAGS.length-1)];
+    if(used[t]) continue;
+    used[t]=1; tags.push(t);
+  }
+  const desc = `Herramienta ${name} — sirve para ${tags.join(', ')}. Ideal para flujos automáticos y productividad a escala.`;
+  return { id, name, tags, desc, iconText: name.split(' ')[0].slice(0,2).toUpperCase() };
+}
+
+/* Generador perezoso: genera metadata en lotes sin bloquear IU */
+function generateBatch(count, cb){
+  if(isGenerating) return;
+  isGenerating = true;
+  const start = totalGenerated + 1;
+  const end = Math.min(totalGenerated + count, maxSimulated);
+  let i = start;
+  function loopChunk(){
+    const chunk = 200; // micro-lotes
+    const fragment = [];
+    for(let k=0;k<chunk && i<=end; k++, i++){
+      const item = makeTool(i);
+      generatedItems.push(item);
+    }
+    totalGenerated = generatedItems.length;
+    metaCount.textContent = `Generadas: ${totalGenerated.toLocaleString()}`;
+    if(i <= end){
+      // deja respirar al hilo de la UI
+      requestAnimationFrame(loopChunk);
     } else {
-      alert('Pronto en Google Play — todavía no disponible.');
+      isGenerating = false;
+      if(cb) cb();
     }
   }
+  requestAnimationFrame(loopChunk);
+}
 
-  // Pequeña mejora: ajustar foco si el usuario tabula
-  document.addEventListener('keydown', function(e){
-    if(e.key === 'Enter'){
-      const active = document.activeElement;
-      if(active && active.classList.contains('cta')){ active.click(); }
+/* Render en grid: solo renderiza un SUBCONJUNTO filtrado o por scroll.
+   Estrategia simple: cuando haya X items visibles, añadimos más al DOM en lotes.
+*/
+let domRendered = 0;
+const renderBatchSize = 40;
+
+function applyFiltersAndRender(){
+  const q = (searchInput.value || '').trim().toLowerCase();
+  const activeFilters = Array.from(document.querySelectorAll('.filter.active')).map(el=>el.dataset.filter);
+  // filtrado sobre metadata (no recorremos DOM)
+  visibleItems = generatedItems.filter(item=>{
+    if(q){
+      const hay = item.name.toLowerCase().includes(q) || item.desc.toLowerCase().includes(q) || item.tags.join(' ').toLowerCase().includes(q);
+      if(!hay) return false;
     }
+    if(activeFilters.length){
+      // al menos uno de sus tags debe coincidir
+      if(!item.tags.some(t => activeFilters.includes(t))) return false;
+    }
+    return true;
   });
+  visibleCount.textContent = `${visibleItems.length.toLocaleString()} visibles`;
+  // reset DOM render
+  domRendered = 0;
+  toolGrid.innerHTML = '';
+  renderMore();
+}
+
+function renderMore(){
+  if(domRendered >= visibleItems.length) return;
+  const slice = visibleItems.slice(domRendered, domRendered + renderBatchSize);
+  const frag = document.createDocumentFragment();
+  slice.forEach(item=>{
+    const card = makeCard(item);
+    frag.appendChild(card);
+  });
+  toolGrid.appendChild(frag);
+  domRendered += slice.length;
+  visibleCount.textContent = `${visibleItems.length.toLocaleString()} visibles · mostrando ${domRendered.toLocaleString()}`;
+}
+
+/* Crear un elemento tarjeta (DOM) */
+function makeCard(item){
+  const el = document.createElement('div');
+  el.className = 'card';
+  el.dataset.id = item.id;
+  el.innerHTML = `
+    <div style="display:flex; gap:10px; align-items:center;">
+      <div class="icon" aria-hidden="true" style="background:${colorFromId(item.id)}">${escapeHtml(item.iconText)}</div>
+      <div style="flex:1;">
+        <h3>${escapeHtml(item.name)}</h3>
+        <div class="tags">${item.tags.map(t=>`<span class="tag">${escapeHtml(t)}</span>`).join('')}</div>
+      </div>
+    </div>
+    <p>${escapeHtml(item.desc)}</p>
+    <div class="actions">
+      <div style="display:flex; gap:8px;">
+        <button class="btn demoBtn" data-id="${item.id}">Demo</button>
+        <button class="btn primary openBtn" data-id="${item.id}">Abrir</button>
+      </div>
+      <div style="color:var(--muted); font-size:12px;">ID ${item.id}</div>
+    </div>
+  `;
+  // eventos
+  el.querySelector('.openBtn').addEventListener('click', ()=> openModal(item));
+  el.querySelector('.demoBtn').addEventListener('click', ()=> quickDemo(item));
+  return el;
+}
+
+/* Eventos modal y demo */
+function openModal(item){
+  modalTitle.textContent = item.name;
+  modalDesc.textContent = item.desc + ' — Esto es una demo local; la herramienta se puede integrar con APIs o dejarse como snippet autónomo.';
+  modalBack.classList.add('show');
+  modalOpen.onclick = ()=> {
+    modalBack.classList.remove('show');
+    alert(`Abriendo herramienta: ${item.name}\n(En esta demo, abrir = mostrar info. Integración real requiere backend).`);
+  };
+  modalDemo.onclick = ()=> {
+    quickDemo(item);
+  };
+}
+
+function quickDemo(item){
+  alert(`Demo rápida de ${item.name}\nTags: ${item.tags.join(', ')}\nDescripción: ${item.desc}`);
+}
+
+/* cerrar modal */
+modalClose.addEventListener('click', ()=> modalBack.classList.remove('show'));
+modalBack.addEventListener('click', (e)=> { if(e.target === modalBack) modalBack.classList.remove('show'); });
+
+/* Generador visual: color para iconos */
+function colorFromId(id){
+  const hue = (id * 47) % 360;
+  return `hsl(${hue} 60% 70%)`;
+}
+
+/* Escape básico para seguridad */
+function escapeHtml(s){ return String(s).replace(/[&<>"']/g, (m)=> ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+
+/* Scroll infinito: cuando el usuario llegue a 80% dentro del grid, renderizar más */
+toolGrid.addEventListener('scroll', ()=>{
+  const el = toolGrid;
+  if(el.scrollTop + el.clientHeight > el.scrollHeight - 800){
+    renderMore();
+  }
+});
+
+/* pulsar ENTRA: oculta hero y lanza sesión generadora */
+enterBtn.addEventListener('click', function(e){
+  e.preventDefault();
+  // animación mínima: desaparecer hero y mostrar session
+  document.getElementById('main-wrap').style.display = 'none';
+  sessionEl.classList.add('show');
+  // Si no hay items generados, empezar a generar y luego filtrar/render
+  if(generatedItems.length === 0){
+    loader.style.display = 'inline-block';
+    generateBatch(500, ()=>{
+      loader.style.display = 'none';
+      applyFiltersAndRender();
+      // empezar generación continua en background (simula "millones" hasta maxSimulated)
+      scheduleBackgroundGeneration();
+    });
+  } else {
+    applyFiltersAndRender();
+  }
+});
+
+/* cerrar sesión vuelve a la página principal */
+closeSession.addEventListener('click', ()=>{
+  sessionEl.classList.remove('show');
+  document.getElementById('main-wrap').style.display = 'block';
+});
+
+/* filtros: toggle */
+document.querySelectorAll('.filter').forEach(el=>{
+  el.addEventListener('click', ()=>{
+    el.classList.toggle('active');
+    el.style.borderColor = el.classList.contains('active') ? 'rgba(255,255,255,0.18)' : 'rgba(255,255,255,0.06)';
+    applyFiltersAndRender();
+  });
+});
+
+/* búsqueda con debounce */
+let debounceTimer = null;
+searchInput.addEventListener('input', ()=>{
+  if(debounceTimer) clearTimeout(debounceTimer);
+  loader.style.display = 'inline-block';
+  debounceTimer = setTimeout(()=>{
+    applyFiltersAndRender();
+    loader.style.display = 'none';
+  }, 220);
+});
+
+/* ordenar: solo demostrativo (alterna) */
+sortBtn.addEventListener('click', ()=>{
+  if(sortBtn.textContent.includes('Relevancia')){
+    sortBtn.textContent = 'Ordenar: ID asc';
+    generatedItems.sort((a,b)=>a.id-b.id);
+  } else {
+    sortBtn.textContent = 'Ordenar: Relevancia';
+    // random shuffle para "relevancia"
+    generatedItems.sort(()=>Math.random()-0.5);
+  }
+  applyFiltersAndRender();
+});
+
+/* Background generation en lotes, para simular "millones" sin colapsar */
+function scheduleBackgroundGeneration(){
+  generatorId++;
+  const thisId = generatorId;
+  function step(){
+    if(thisId !== generatorId) return; // cancelado
+    if(totalGenerated >= maxSimulated) return;
+    // genera otro lote moderado
+    generateBatch(batchSize, ()=>{
+      // si ya hay filtros activos, actualizamos la vista
+      applyFiltersAndRender();
+      // esperar un poco antes del siguiente lote
+      setTimeout(step, 1500 + Math.random()*1200);
+    });
+  }
+  setTimeout(step, 700);
+}
+
+/* inicialmente: pre-genera un número pequeño para respuesta rápida */
+generateBatch(120, ()=>{ metaCount.textContent = `Generadas: ${totalGenerated.toLocaleString()}`; applyFiltersAndRender(); });
+
+/* helper fakeLink */
+function fakeLink(which){
+  if(which === 'appstore') alert('Pronto en App Store — todavía no disponible.');
+  else alert('Pronto en Google Play — todavía no disponible.');
+}
+
+/* Accessibility: tecla ESC cierra modal o sesión */
+document.addEventListener('keydown', (e)=>{
+  if(e.key === 'Escape'){
+    if(modalBack.classList.contains('show')) modalBack.classList.remove('show');
+    else if(sessionEl.classList.contains('show')) {
+      sessionEl.classList.remove('show');
+      document.getElementById('main-wrap').style.display = 'block';
+    }
+  }
+});
 </script>
 </body>
 </html>

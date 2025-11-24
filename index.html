@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <base target="_self">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exagon - Interactive Platform</title>
+    <meta name="description" content="Exagon - Massive dark interactive web platform with AI integration">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#000000",
+                        secondary: "#333333",
+                        accent: "#555555",
+                        text: "#ffffff",
+                        muted: "#cccccc"
+                    },
+                    spacing: {
+                        "128": "32rem",
+                        "144": "36rem"
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .console-text {
+            font-family: 'Courier New', monospace;
+        }
+        .gradient-border {
+            background: linear-gradient(45deg, #333333, #555555, #333333);
+        }
+        .session-card {
+            transition: all 0.3s ease;
+        }
+        .session-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.1);
+        }
+        .chat-message {
+            animation: fadeIn 0.3s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-black text-white">
+    <!-- Fixed Header -->
+    <header class="fixed top-0 left-0 right-0 bg-black border-b border-gray-800 z-50">
+        <div class="container mx-auto px-6 py-4">
+            <h1 class="text-3xl font-bold text-white">Exagon</h1>
+        </div>
+    </header>
+
+    <main class="pt-20 pb-24">
+        <!-- Main Control Section -->
+        <section class="container mx-auto px-6 py-12">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">Interactive Sessions Hub</h2>
+                <p class="text-gray-400 text-lg">Access powerful interactive tools and experiences</p>
+            </div>
+
+            <!-- Session Buttons Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-16">
+                <div class="session-card bg-gray-900 rounded-lg p-6 border border-gray-700 cursor-pointer">
+                    <div class="text-center">
+                        <i class="fas fa-brain text-4xl text-white mb-4"></i>
+                        <h3 class="text-xl font-semibold mb-2">Neural Network</h3>
+                        <p class="text-gray-400">Advanced AI modeling</p>
+                    </div>
+                </div>
+                <div class="session-card bg-gray-900 rounded-lg p-6 border border-gray-700 cursor-pointer">
+                    <div class="text-center">
+                        <i class="fas fa-chart-line text-4xl text-white mb-4"></i>
+                        <h3 class="text-xl font-semibold mb-2">Data Analytics</h3>
+                        <p class="text-gray-400">Real-time data processing</p>
+                    </div>
+                </div>
+                <div class="session-card bg-gray-900 rounded-lg p-6 border border-gray-700 cursor-pointer">
+                    <div class="text-center">
+                        <i class="fas fa-code text-4xl text-white mb-4"></i>
+                        <h3 class="text-xl font-semibold mb-2">Code Editor</h3>
+                        <p class="text-gray-400">Live coding environment</p>
+                    </div>
+                </div>
+                <div class="session-card bg-gray-900 rounded-lg p-6 border border-gray-700 cursor-pointer">
+                    <div class="text-center">
+                        <i class="fas fa-gamepad text-4xl text-white mb-4"></i>
+                        <h3 class="text-xl font-semibold mb-2">Game Engine</h3>
+                        <p class="text-gray-400">Interactive gaming</p>
+                    </div>
+                </div>
+                <div class="session-card bg-gray-900 rounded-lg p-6 border border-gray-700 cursor-pointer">
+                    <div class="text-center">
+                        <i class="fas fa-vr-cardboard text-4xl text-white mb-4"></i>
+                        <h3 class="text-xl font-semibold mb-2">VR Experience</h3>
+                        <p class="text-gray-400">Virtual reality sessions</p>
+                    </div>
+                </div>
+                <div class="session-card bg-gray-900 rounded-lg p-6 border border-gray-700 cursor-pointer">
+                    <div class="text-center">
+                        <i class="fas fa-robot text-4xl text-white mb-4"></i>
+                        <h3 class="text-xl font-semibold mb-2">AI Assistant</h3>
+                        <p class="text-gray-400">Smart automation</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Description Area -->
+            <div class="bg-gray-900 rounded-lg p-8 border border-gray-700 mb-16">
+                <h3 class="text-2xl font-bold mb-4 text-white">Description</h3>
+                <p class="text-gray-300 leading-relaxed">
+                    Welcome to Exagon - your centralized hub for interactive digital experiences. 
+                    This platform provides access to multiple specialized sessions including AI integration, 
+                    data analysis tools, coding environments, and immersive experiences. 
+                    Each session is designed to offer powerful functionality with an elegant dark interface.
+                </p>
+            </div>
+
+            <!-- AI Chat Section -->
+            <div class="bg-gray-900 rounded-lg border border-gray-700 overflow-hidden">
+                <div class="gradient-border p-4">
+                    <h3 class="text-2xl font-bold text-white text-center">¡Hazlo con AI!</h3>
+                </div>
+                
+                <div class="p-6">
+                    <!-- API Key Input -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-300 mb-2">API Key</label>
+                        <div class="flex space-x-2">
+                            <input 
+                                type="password" 
+                                id="apiKey" 
+                                placeholder="Enter your API key here..."
+                                class="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-gray-500"
+                            >
+                            <button 
+                                id="saveApiKey" 
+                                class="bg-gray-700 hover:bg-gray-600 text-white px-6 py-3 rounded-lg transition-colors"
+                            >
+                                Save
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Chat Console -->
+                    <div class="bg-black rounded-lg border border-gray-700 mb-4">
+                        <div class="p-4 border-b border-gray-700">
+                            <h4 class="text-lg font-semibold text-white">AI Console Session</h4>
+                        </div>
+                        <div 
+                            id="chatMessages" 
+                            class="h-96 overflow-y-auto p-4 space-y-4 console-text"
+                        >
+                            <div class="chat-message text-green-400">
+                                <span class="font-bold">System:</span> AI Console initialized. Ready for interaction.
+                            </div>
+                            <div class="chat-message text-blue-400">
+                                <span class="font-bold">System:</span> Enter your API key above to enable AI features.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chat Input -->
+                    <div class="flex space-x-2">
+                        <input 
+                            type="text" 
+                            id="chatInput" 
+                            placeholder="Type your message here..."
+                            class="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-gray-500"
+                        >
+                        <button 
+                            id="sendMessage" 
+                            class="bg-gray-700 hover:bg-gray-600 text-white px-6 py-3 rounded-lg transition-colors"
+                        >
+                            Send
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-gray-800">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex flex-wrap justify-center space-x-8">
+                <a href="#" class="text-gray-400 hover:text-white transition-colors flex items-center space-x-2">
+                    <i class="fas fa-users"></i>
+                    <span>Creadores/Equipo</span>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-white transition-colors flex items-center space-x-2">
+                    <i class="fas fa-question-circle"></i>
+                    <span>Ayuda</span>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-white transition-colors flex items-center space-x-2">
+                    <i class="fas fa-comment-alt"></i>
+                    <span>Opinión/Feedback</span>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-white transition-colors flex items-center space-x-2">
+                    <i class="fas fa-flag"></i>
+                    <span>Reportar</span>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-white transition-colors flex items-center space-x-2">
+                    <i class="fas fa-file-contract"></i>
+                    <span>Términos</span>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Data definitions
+        const sessionData = [
+            { "id": 1, "title": "Neural Network", "icon": "fa-brain", "description": "Advanced AI modeling" },
+            { "id": 2, "title": "Data Analytics", "icon": "fa-chart-line", "description": "Real-time data processing" },
+            { "id": 3, "title": "Code Editor", "icon": "fa-code", "description": "Live coding environment" },
+            { "id": 4, "title": "Game Engine", "icon": "fa-gamepad", "description": "Interactive gaming" },
+            { "id": 5, "title": "VR Experience", "icon": "fa-vr-cardboard", "description": "Virtual reality sessions" },
+            { "id": 6, "title": "AI Assistant", "icon": "fa-robot", "description": "Smart automation" }
+        ];
+
+        const footerLinks = [
+            { "id": 1, "text": "Creadores/Equipo", "icon": "fa-users" },
+            { "id": 2, "text": "Ayuda", "icon": "fa-question-circle" },
+            { "id": 3, "text": "Opinión/Feedback", "icon": "fa-comment-alt" },
+            { "id": 4, "text": "Reportar", "icon": "fa-flag" },
+            { "id": 5, "text": "Términos", "icon": "fa-file-contract" }
+        ];
+
+        // DOM Elements
+        const apiKeyInput = document.getElementById("apiKey");
+        const saveApiKeyBtn = document.getElementById("saveApiKey");
+        const chatInput = document.getElementById("chatInput");
+        const sendMessageBtn = document.getElementById("sendMessage");
+        const chatMessages = document.getElementById("chatMessages");
+
+        // State
+        let apiKey = "";
+        let chatHistory = [];
+
+        // Event Listeners
+        document.addEventListener("DOMContentLoaded", function() {
+            // Session cards click handlers
+            document.querySelectorAll(".session-card").forEach((card, index) => {
+                card.addEventListener("click", function() {
+                    const session = sessionData[index];
+                    addChatMessage("System", `Session "${session.title}" selected. Feature coming soon.`, "yellow-400");
+                });
+            });
+
+            // API Key handling
+            saveApiKeyBtn.addEventListener("click", function() {
+                apiKey = apiKeyInput.value.trim();
+                if (apiKey) {
+                    addChatMessage("System", "API key saved successfully.", "green-400");
+                    apiKeyInput.value = "";
+                } else {
+                    addChatMessage("System", "Please enter a valid API key.", "red-400");
+                }
+            });
+
+            // Chat functionality
+            sendMessageBtn.addEventListener("click", sendMessage);
+            chatInput.addEventListener("keypress", function(e) {
+                if (e.key === "Enter") {
+                    sendMessage();
+                }
+            });
+
+            // Footer links - prevent default navigation
+            document.querySelectorAll("footer a").forEach(link => {
+                link.addEventListener("click", function(e) {
+                    e.preventDefault();
+                    const linkText = this.querySelector("span").textContent;
+                    addChatMessage("System", `Navigation to "${linkText}" intercepted. Feature coming soon.`, "blue-400");
+                });
+            });
+        });
+
+        // Functions
+        function addChatMessage(sender, message, colorClass = "white") {
+            const messageDiv = document.createElement("div");
+            messageDiv.className = `chat-message text-${colorClass}`;
+            messageDiv.innerHTML = `<span class="font-bold">${sender}:</span> ${message}`;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            
+            // Add to history
+            chatHistory.push({ sender, message, timestamp: new Date() });
+        }
+
+        function sendMessage() {
+            const message = chatInput.value.trim();
+            if (!message) return;
+
+            if (!apiKey) {
+                addChatMessage("System", "Please enter your API key first to use AI features.", "red-400");
+                return;
+            }
+
+            // Add user message
+            addChatMessage("You", message, "gray-300");
+
+            // Clear input
+            chatInput.value = "";
+
+            // Simulate AI response (replace with actual API call)
+            setTimeout(() => {
+                addChatMessage("AI", "This is a simulated response. Integrate with your preferred AI API to enable real responses.", "purple-400");
+            }, 1000);
+        }
+
+        // Navigation prevention for all links
+        document.addEventListener("click", function(e) {
+            if (e.target.tagName === "A" || e.target.closest("a")) {
+                e.preventDefault();
+            }
+        });
+    </script>
+</body>
+</html>

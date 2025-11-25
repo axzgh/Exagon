@@ -1,42 +1,45 @@
-// Simulación de tiempo de respuesta
-function delay(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+const API_KEY = "AQUI_PONES_TU_API_KEY"; 
+
+const API_URL = "https://openrouter.ai/api/v1/chat/completions";
+
+const chatBox = document.getElementById("chat");
+const input = document.getElementById("msg-input");
+const btn = document.getElementById("send-btn");
+
+function addMessage(text, sender) {
+    const div = document.createElement("div");
+    div.className = "msg " + sender;
+    div.textContent = text;
+    chatBox.appendChild(div);
+    chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-// Base de respuestas del bot
-const BOT_RESPUESTAS = [
-    { 
-        claves: ["hola", "buenas", "hey"], 
-        respuesta: () => "Holaa, ¿qué tal? 👀" 
-    },
-    { 
-        claves: ["ayuda", "como hago", "no entiendo"], 
-        respuesta: () => "Dime qué necesitas y vemos si no explota nada." 
-    },
-    { 
-        claves: ["quien eres", "que eres"], 
-        respuesta: () => "Soy un bot sencillo pero con actitud, ¿contento?" 
-    },
-    { 
-        claves: ["adios", "bye", "nos vemos"], 
-        respuesta: () => "Chaooo, no desaparezcas tres meses esta vez 👋" 
-    }
-];
+btn.addEventListener("click", () => {
+    const text = input.value.trim();
+    if (!text) return;
 
-// Función principal del bot
-async function getBotResponse(message) {
-    const texto = message.toLowerCase().trim();
+    addMessage(text, "user");
+    input.value = "";
 
-    // Simulación de que "piensa"
-    await delay(300 + Math.random() * 400);
-
-    // Buscar coincidencias
-    for (const regla of BOT_RESPUESTAS) {
-        if (regla.claves.some(pal => texto.includes(pal))) {
-            return regla.respuesta();
-        }
-    }
-
-    // Respuesta por defecto
-    return "Mmm… no entendí esa vaina 😐 inténtalo diferente.";
-}
+    fetch(API_URL, {
+        method: "POST",
+        headers: {
+            "Authorization": `Bearer ${API_KEY}`,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            model: "mistral",
+            messages: [
+                { role: "user", content: text }
+            ]
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        const reply = data.choices[0].message.content;
+        addMessage(reply, "bot");
+    })
+    .catch(() => {
+        addMessage("Error... tu API se murió o hiciste algo mal.", "bot");
+    });
+});

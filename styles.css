@@ -478,3 +478,43 @@ button:active, .btn:active {
     opacity: 1;
     pointer-events: all;
 }
+/* ======================================= */
+/* 📱 Media Queries para Móviles 📱 */
+/* ======================================= */
+
+@media (max-width: 768px) {
+    /* Ajustes de tipografía y espaciado en general */
+    .main-question {
+        font-size: 38px;
+        margin-bottom: 30px;
+    }
+
+    .action-buttons {
+        grid-template-columns: 1fr 1fr; /* 2 columnas en móvil */
+        gap: 14px;
+    }
+    
+    /* SOLUCIÓN: El Side Panel debe ocupar todo el ancho en móvil */
+    .side-panel {
+        width: 100%;
+        left: -100%; /* Asegura que inicie fuera de la pantalla */
+        border-right: none;
+    }
+
+    /* SOLUCIÓN: El Input Bar debe adaptarse mejor */
+    .input-bar {
+        padding: 12px 16px;
+    }
+    
+    .input-container {
+        border-radius: 24px;
+        padding: 8px 14px;
+    }
+    
+    #sendBtn {
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+    
+    /* La pantalla de Configuración ya estaba configurada para 100% de ancho */
+}

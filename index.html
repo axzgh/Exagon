@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head><title>Mi Dashboard de IA</title></head>
+<body>
+    <h1>Resultados de Clasificación</h1>
+    <pre id="salida"></pre>
+    <script>
+        const leads = [
+            { nombre: "Carlos", mensaje: "Quiero comprar", interes: "ALTO" },
+            { nombre: "Maria", mensaje: "Estafa", interes: "CRITICO" }
+        ];
+        document.getElementById('salida').innerText = JSON.stringify(leads, null, 2);
+    </script>
+</body>
+</html>
